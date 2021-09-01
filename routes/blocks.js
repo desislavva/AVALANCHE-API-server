@@ -1,16 +1,16 @@
 const express = require("express");
 
-const router = express.Router();
-
-
 const BlockController = require("../controller/blocks");
 
-//GET block by hash
-router.get('/blocks/:hash', BlockController.getBlockByHash);
+const router = express.Router();
+
+//GET block by hash from C-chain
+router.get('/blocks/hash/:hash', BlockController.getBlockByHash);
+
+//GET block by number from C-chain
+router.get('/blocks/number/:blocknumber', BlockController.getBlockByNumber);
 
 // GET
 router.get("/test", (req, res) => res.json({ msg: "backend works" }));
-
-
 
 module.exports = router;
