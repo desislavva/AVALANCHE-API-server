@@ -1,4 +1,14 @@
-const axios = require("axios");
+const dotenv = require('dotenv');
 
-const C_CHAIN_CLIENT_ENDPOINT = 'http://192.168.0.114:9650/ext/bc/C/rpc';
+const cChainMethods = require('../services/c-chain');
 
+dotenv.config();
+
+exports.getTransactionByHash = async (req, res, next) => {
+
+      
+    const cChainTransaction = await cChainMethods.getTransactionByHashFromCChain(req.params.hash);
+
+    res.send(cChainTransaction);
+     
+};
