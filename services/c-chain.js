@@ -4,7 +4,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-
 //GET block by hash from C-chain
 exports.getBlockByHashFromCChain = async (hash) => {
 
@@ -23,8 +22,6 @@ exports.getBlockByHashFromCChain = async (hash) => {
     return response.data;
 };
 
-
-
 //GET block by number from C-chain
 exports.getBlockByNumberFromCChain = async (number) => {
 
@@ -42,10 +39,10 @@ exports.getBlockByNumberFromCChain = async (number) => {
         },
     });
     
-    return response.data;
+    return [response.data, response.data.result.hash];
 };
 
-//GET X blocks after N-th from C-chain
+//GET transaction by hash from C-chain
 exports.getTransactionByHashFromCChain = async (hash) => {
     const response = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
@@ -63,10 +60,8 @@ exports.getTransactionByHashFromCChain = async (hash) => {
 };
 
 
-//GET transaction by hash from C-chain
+//GET address info by hash from C-chain
 
-
-//GET address balance by hash from C-chain
 
 
 //GET X transaction from address after N-th transaction from C-chain
