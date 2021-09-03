@@ -1,6 +1,6 @@
 const axios = require("axios");
-
 const dotenv = require('dotenv');
+const web3 = require('web3-utils');
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ exports.getBlockByHashFromCChain = async (hash) => {
         jsonrpc: '2.0',
         id: 1,
         method: 'eth_getBlockByHash',
-        params: [`${hash}`, true],
+        params: [`${hash}`, true]
     }, {
         headers: {
           'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ exports.getBlockByNumberFromCChain = async (number) => {
         jsonrpc: '2.0',
         id: 1,
         method: 'eth_getBlockByNumber',
-        params: [`${hexNumber}`, true],
+        params: [`${hexNumber}`, true]
     }, {
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ exports.getTransactionByHashFromCChain = async (hash) => {
         jsonrpc: '2.0',
         id: 1,
         method: 'eth_getTransactionByHash',
-        params: [`${hash}`],
+        params: [`${hash}`]
     }, {
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,33 @@ exports.getTransactionByHashFromCChain = async (hash) => {
 
 
 //GET address info by hash from C-chain
+exports.getAddressInfoFromCChain = async (cChainAddress) => {
+    const responseForBalance = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'eth_getBalance',
+        params: [`${cChainAddress}`, 'latest']
+    }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+    });
+    
+    const responseForTransactionCount = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'eth_getTransactionCount',
+        params: [`${cChainAddress}`, 'latest']
+    }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+    });
 
+    return [web3.fromWei(`${responseForBalance.data.result}`, 'ether'), parseInt(responseForTransactionCount.data.result)];
+};
 
 
 //GET X transaction from address after N-th transaction from C-chain

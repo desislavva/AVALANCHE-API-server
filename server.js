@@ -10,7 +10,7 @@ const app = express();
 
 app.use("/blocks/", blockRoutes);
 app.use("/transactions/", transactionRoutes);
-//app.use("/address/", addressRoutes);
+app.use("/address/", addressRoutes);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
