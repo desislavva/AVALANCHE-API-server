@@ -28,8 +28,10 @@ exports.getAddressInfoByHashFromXChain = async (address) => {
         },
     });
 
-    if (responseForBalance.data.error) {
-        return responseForBalance.data.error.message;
+    console.log(responseForBalance.data);
+
+    if (responseForBalance.data.error || responseForBalance.data.result.balances.length == 0) {
+        return JSON.parse('{"address": "error"}');
     }
 
 
