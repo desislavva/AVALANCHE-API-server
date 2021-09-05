@@ -74,6 +74,10 @@ exports.getAddressInfoFromCChain = async (cChainAddress) => {
         },
     });
     
+    if (responseForBalance.data.error) {
+        return responseForBalance.data.error.message;
+    }
+
     const responseForTransactionCount = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
         id: 1,
