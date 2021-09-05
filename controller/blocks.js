@@ -30,7 +30,7 @@ exports.getXBlocksFromNthFromCChain = async (req, res, next) => {
     const blockNumber = req.params.blocknumber;
     const count = req.params.count;
 
-    for (let i = blockNumber; i > blockNumber - count; --i)
+    for (let i = blockNumber - count; i < blockNumber; ++i)
     {
         let hashValue = await cChainMethods.getBlockByNumberFromCChain(i);
         cChainArray[k] = hashValue[1];

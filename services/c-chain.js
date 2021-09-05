@@ -54,8 +54,12 @@ exports.getTransactionByHashFromCChain = async (hash) => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
-    });
+    })
     
+    if (response.data.result == null || response.data.error) {
+        return 0;
+    }
+
     return response.data;
 };
 

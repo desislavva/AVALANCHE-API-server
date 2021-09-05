@@ -3,10 +3,13 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-//GET transaction info by id - Ortelius API
-exports.getTransactionByIdFromXChain = async (txId) => {
-    
-};
+//GET transaction info by hash/id - Ortelius API
+// exports.getTransactionByIdFromXChain = async (txId) => {
+//     const response = await axios.get(`${process.env.ORTELIUS_PUBLIC_API + `transactions/${txId}`}`);
+
+//     console.log(response.data);
+//     return response.data;
+// };
 
 //GET address info by hash
 exports.getAddressInfoByHashFromXChain = async (address) => {
@@ -52,6 +55,28 @@ exports.getAddressInfoByHashFromXChain = async (address) => {
 };
 
 //GET X transaction from address after N-th transaction
+exports.getXTransactionsAfterNthFromAddressFromXChain = async (address, n, x) => {
 
+    const response = await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'avm.getAddressTxs',
+        params: {
+                address: `${address}`,
+                assetID: 'AVAX'
+        }
+    }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+    });
+
+    if (response.data.error) {
+        return response.data.error.message;
+    }
+
+    return (response.data.result.txIDs).slice(n - x, n);
+}
 
 //GET X unaccepted transaction after N-th transaction
