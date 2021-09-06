@@ -8,17 +8,21 @@ dotenv.config();
 exports.getTransactionByHash = async (req, res, next) => {
     let xChainTransaction;
     let cChainTransaction;
+    let pChainTransaction;
 
-    //xChainTransaction = await xChainMethods.getTransactionByIdFromXChain(req.params.hash);
-
+    xChainTransaction = await xChainMethods.getTransactionByIdFromXChain(req.params.hash);
     cChainTransaction = await cChainMethods.getTransactionByHashFromCChain(req.params.hash);
 
-    if (cChainTransaction == 0) {
+    if (xChainTransaction == 1 || cChainTransaction == 1 || pChainTransaction == 1) {
         res.send(JSON.parse('{"result": "wrong input"}'));
-    } else {
+    } else if (xChainTransaction != 1) {
+        res.send(xChainTransaction);
+    } else if (cChainTransaction != 1) {
         res.send(cChainTransaction);
-    }
-    //res.send(xChainTransaction);
+    } else if (pChainTransaction != 1) {
+        res.send(pChainTransaction);
+    } 
+
 };
 
 exports.getXTransactionsAfterNthFromAddress = async (req, res, next) => {

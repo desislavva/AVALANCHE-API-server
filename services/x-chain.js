@@ -1,15 +1,21 @@
 const axios = require("axios");
 const dotenv = require('dotenv');
+const { report } = require("../routes/transactions");
 
 dotenv.config();
 
 //GET transaction info by hash/id - Ortelius API
-// exports.getTransactionByIdFromXChain = async (txId) => {
-//     const response = await axios.get(`${process.env.ORTELIUS_PUBLIC_API + `transactions/${txId}`}`);
+exports.getTransactionByIdFromXChain = async (txId) => {
+    let response;
 
-//     console.log(response.data);
-//     return response.data;
-// };
+    try {
+        response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT + `transactions/${txId}`}`);
+    } catch (error) {
+        return 1;
+    }
+    
+    return response.data;
+};
 
 //GET address info by hash
 exports.getAddressInfoByHashFromXChain = async (address) => {

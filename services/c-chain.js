@@ -57,7 +57,7 @@ exports.getTransactionByHashFromCChain = async (hash) => {
     })
     
     if (response.data.result == null || response.data.error) {
-        return 0;
+        return 1;
     }
 
     return response.data;
