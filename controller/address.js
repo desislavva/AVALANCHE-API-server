@@ -1,5 +1,7 @@
 const dotenv = require('dotenv');
 
+dotenv.config();
+
 const cChainMethods = require('../services/c-chain');
 const xChainMethods = require('../services/x-chain');
 const pChainMethods = require('../services/p-chain');
@@ -7,8 +9,6 @@ const pChainMethods = require('../services/p-chain');
 const X_CHAIN = 'X';
 const P_CHAIN = 'P';
 const C_CHAIN = '0x';
-
-dotenv.config();
 
 //GET address info by hash
 exports.getAddressInfoByHash = async (req, res, next) => {

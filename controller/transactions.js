@@ -1,10 +1,14 @@
 const dotenv = require('dotenv');
 
+dotenv.config();
+
 const cChainMethods = require('../services/c-chain');
 const xChainMethods = require('../services/x-chain');
 const pChainMethods = require('../services/p-chain');
 
-dotenv.config();
+const X_CHAIN = 'X';
+const P_CHAIN = 'P';
+const C_CHAIN = '0x';
 
 exports.getTransactionByHash = async (req, res, next) => {
     let xChainTransaction;
@@ -29,8 +33,20 @@ exports.getTransactionByHash = async (req, res, next) => {
 
 exports.getXTransactionsAfterNthFromAddress = async (req, res, next) => {
     let xChainTransactions;
+    let pChainTransactions;
 
-    xChainTransactions = await xChainMethods.getXTransactionsAfterNthFromAddressFromXChain(req.params.address, req.params.n, req.params.x);
-
-    res.send(xChainTransactions);
+    if ((req.params.address).charAt(0) == X_CHAIN) {
+        xChainTransactions = await xChainMethods.getXTransactionsAfterNthFromAddressFromXChain(req.params.address, req.params.n, req.params.x);
+        res.send(xChainTransactions);
+    } else if ((req.params.address).charAt(0) == P_CHAIN) {
+        pChainTransactions = await pChainMethods.getXTransactionsAfterNthFromAddressFromPChain(req.params.address, req.params.n, req.params.x);
+        
+        if (pChainTransactions == 1) {
+            res.send(JSON.parse('{"result":"error"}'));
+        } else {
+            res.send(pChainTransactions);
+        }
+    } else {
+        res.send(JSON.parse('{"result":"wrong chain"}'));
+    }
 };

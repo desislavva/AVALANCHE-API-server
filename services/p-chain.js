@@ -50,7 +50,17 @@ exports.getAddressInfoFromPChain = async (address) => {
     return response.data.result;
 };
 
-//GET X transaction from address after N-th transaction from P-chain
+//GET X transactions from address after N-th transaction from P-chain
+exports.getXTransactionsAfterNthFromAddressFromPChain = async (address, n, x) => {
+    let response;
 
+    try {
+        response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT}` + `transactions?address=${address}`);
+    } catch (error) {
+        return 1;
+    }
 
-//GET X unaccepted transaction after N-th transaction from P-chain
+    return (response.data.transactions).slice(n - x, n);
+};
+
+//GET X unaccepted transactions after N-th transaction from P-chain
