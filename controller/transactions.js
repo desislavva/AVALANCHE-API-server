@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 
 const cChainMethods = require('../services/c-chain');
 const xChainMethods = require('../services/x-chain');
+const pChainMethods = require('../services/p-chain');
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ exports.getTransactionByHash = async (req, res, next) => {
 
     xChainTransaction = await xChainMethods.getTransactionByIdFromXChain(req.params.hash);
     cChainTransaction = await cChainMethods.getTransactionByHashFromCChain(req.params.hash);
+    pChainTransaction = await pChainMethods.getTransactionByIdFromPChain(req.params.hash);
 
     if (xChainTransaction == 1 || cChainTransaction == 1 || pChainTransaction == 1) {
         res.send(JSON.parse('{"result": "wrong input"}'));
@@ -21,7 +23,7 @@ exports.getTransactionByHash = async (req, res, next) => {
         res.send(cChainTransaction);
     } else if (pChainTransaction != 1) {
         res.send(pChainTransaction);
-    } 
+    }
 
 };
 

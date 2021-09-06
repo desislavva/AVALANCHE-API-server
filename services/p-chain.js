@@ -12,8 +12,18 @@ dotenv.config();
 //GET X blocks after N-th from P-chain
 
 
-//GET transaction by hash from P-chain
+//GET transaction by hash from P-chain - Ortelius API
+exports.getTransactionByIdFromPChain = async (txId) => {
+    let response;
 
+    try {
+        response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT + `transactions/${txId}`}`);
+    } catch (error) {
+        return 1;
+    }
+    
+    return response.data;
+};
 
 //GET address balance by hash from P-chain
 exports.getAddressInfoFromPChain = async (address) => {
