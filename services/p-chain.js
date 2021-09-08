@@ -3,13 +3,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-//GET block by hash from P-chain
-
-
-//GET block by number from P-chain
-
-
-//GET X blocks after N-th from P-chain
 
 
 //GET transaction by hash from P-chain - Ortelius API
@@ -50,7 +43,7 @@ exports.getAddressInfoFromPChain = async (address) => {
     return response.data.result;
 };
 
-//GET X transactions from address after N-th transaction from P-chain
+//GET X transactions from address after N-th transaction from P-chain - Ortelius API
 exports.getXTransactionsAfterNthFromAddressFromPChain = async (address, n, x) => {
     let response;
 

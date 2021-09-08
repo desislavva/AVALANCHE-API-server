@@ -34,9 +34,11 @@ exports.getTransactionByHash = async (req, res, next) => {
 exports.getXTransactionsAfterNthFromAddress = async (req, res, next) => {
     let xChainTransactions;
     let pChainTransactions;
+    let cChainTransactions;
 
     if ((req.params.address).charAt(0) == X_CHAIN) {
         xChainTransactions = await xChainMethods.getXTransactionsAfterNthFromAddressFromXChain(req.params.address, req.params.n, req.params.x);
+        
         res.send(xChainTransactions);
     } else if ((req.params.address).charAt(0) == P_CHAIN) {
         pChainTransactions = await pChainMethods.getXTransactionsAfterNthFromAddressFromPChain(req.params.address, req.params.n, req.params.x);
@@ -46,7 +48,21 @@ exports.getXTransactionsAfterNthFromAddress = async (req, res, next) => {
         } else {
             res.send(pChainTransactions);
         }
+    } else if ((req.params.address).slice(0, 2) == C_CHAIN) {
+        cChainTransactions = await cChainMethods.getXTransactionsAfterNthFromAddressFromCChain(req.params.address, req.params.n, req.params.x);
+
+        res.send(cChainTransactions);
     } else {
         res.send(JSON.parse('{"result":"wrong chain"}'));
     }
+};
+
+exports.getXPendingTransactionsAfterNth = async (req, res, next) => {
+    if (req.params.n > 0 && req.params.x > 0) {
+        cChainTransactions = await cChainMethods.getXPendingTransactionsAfterNthFromCChain(req.params.n, req.params.x);
+        res.send(cChainTransactions);
+    } else {
+        res.send(JSON.parse('{"result":"n and x < 0"}'));
+    }
+
 };
