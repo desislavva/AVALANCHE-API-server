@@ -20,7 +20,9 @@ exports.getTransactionByIdFromPChain = async (txId) => {
 
 //GET address balance by hash from P-chain
 exports.getAddressInfoFromPChain = async (address) => {
-    const response = await axios.post(process.env.P_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+    let balanceResult;
+
+    await axios.post(process.env.P_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
         id: 1,
         method: 'platform.getBalance',
@@ -32,15 +34,19 @@ exports.getAddressInfoFromPChain = async (address) => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
+    }).then(response => {
+        balanceResult = [0, response.data.result];
+    }).catch(error => {
+        if(!error.response) {
+            console.log("connection refused to avalanche client");
+            balanceResult = [1, JSON.parse('{"result":"connection refused to avalanche client"}')];
+        } else {
+            console.log(error.response.data);
+            balanceResult = [1, error.response.data];
+        }
     });
 
-    if (response.data.error) {
-        return response.data.error.message;
-    }
-
-    console.log(response.data);
-
-    return response.data.result;
+    return balanceResult;
 };
 
 //GET X transactions from address after N-th transaction from P-chain - Ortelius API
@@ -55,5 +61,3 @@ exports.getXTransactionsAfterNthFromAddressFromPChain = async (address, n, x) =>
 
     return (response.data.transactions).slice(n - x, n);
 };
-
-//GET X unaccepted transactions after N-th transaction from P-chain

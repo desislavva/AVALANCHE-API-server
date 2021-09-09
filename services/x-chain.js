@@ -18,6 +18,7 @@ exports.getTransactionByIdFromXChain = async (txId) => {
 
 //GET address info by hash
 exports.getAddressInfoByHashFromXChain = async (address) => {
+    let balanceResult;
 
     const responseForBalance = await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
@@ -31,14 +32,21 @@ exports.getAddressInfoByHashFromXChain = async (address) => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
+    }).then(response => {
+        balanceResult = [0, response.data.result];
+    }).catch(error => {
+        if(!error.response) {
+            console.log("connection refused to avalanche client");
+            balanceResult = [1, JSON.parse('{"result":"connection refused to avalanche client"}')];
+        } else {
+            console.log(error.response.data);
+            balanceResult = [1, error.response.data];
+        }
     });
 
-    console.log(responseForBalance.data);
-
-    if (responseForBalance.data.error || responseForBalance.data.result.balances.length == 0) {
-        return JSON.parse('{"address": "error"}');
+    if (balanceResult[0] == 1) {
+        return balanceResult;
     }
-
 
     let responseForAssets;
 
@@ -63,6 +71,7 @@ exports.getAddressInfoByHashFromXChain = async (address) => {
 
 //GET X transaction from address after N-th transaction
 exports.getXTransactionsAfterNthFromAddressFromXChain = async (address, n, x) => {
+    let transactionsResult;
 
     const response = await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
@@ -77,13 +86,17 @@ exports.getXTransactionsAfterNthFromAddressFromXChain = async (address, n, x) =>
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
+    }).then(response => {
+        transactionsResult = [0, (response.data.result.txIDs).slice(n - x, n)];
+    }).catch(error => {
+        if(!error.response) {
+            console.log("connection refused to avalanche client");
+            transactionsResult = [1, JSON.parse('{"result":"connection refused to avalanche client"}')];
+        } else {
+            console.log(error.response.data);
+            transactionsResult = [1, error.response.data];
+        }
     });
 
-    if (response.data.error) {
-        return response.data.error.message;
-    }
-
-    return (response.data.result.txIDs).slice(n - x, n);
+    return transactionsResult;
 }
-
-//GET X unaccepted transaction after N-th transaction

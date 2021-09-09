@@ -6,28 +6,40 @@ dotenv.config();
 
 //GET block info by hash from C-chain
 exports.getBlockByHashFromCChain = async (hash) => {
+    let result;
 
-    const response = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+    await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
         id: 1,
         method: 'eth_getBlockByHash',
         params: [`${hash}`, true]
     }, {
         headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
         },
+    }).then(response => {
+        result = [0, response.data];
+    }).catch(error => {
+        if(!error.response) {
+            console.log("connection refused to avalanche client");
+            result = [1, JSON.parse('{"result":"connection refused to avalanche client"}')];
+        } else {
+            console.log(error.response.data);
+            result = [1, error.response.data];
+        }
     });
     
-    return response.data;
+    return result;
 };
 
 //GET block info by number from C-chain
 exports.getBlockByNumberFromCChain = async (number) => {
-
     const hexNumber = "0x" + parseInt(number).toString(16);
     
-    const response = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+    let result;
+
+    await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
         id: 1,
         method: 'eth_getBlockByNumber',
@@ -37,14 +49,26 @@ exports.getBlockByNumberFromCChain = async (number) => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
+    }).then(response => {
+        result = [response.data, response.data.result.hash];
+    }).catch(error => {
+        if(!error.response) {
+            console.log("connection refused to avalanche client");
+            result = [1, JSON.parse('{"result":"connection refused to avalanche client"}')];
+        } else {
+            console.log(error.response.data);
+            result = [1, error.response.data];
+        }
     });
     
-    return [response.data, response.data.result.hash];
+    return result;
 };
 
 //GET transaction by hash from C-chain
 exports.getTransactionByHashFromCChain = async (hash) => {
-    const response = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+    let result;
+
+    await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
         id: 1,
         method: 'eth_getTransactionByHash',
@@ -54,19 +78,27 @@ exports.getTransactionByHashFromCChain = async (hash) => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
-    })
-    
-    if (response.data.result == null || response.data.error) {
-        return 1;
-    }
+    }).then(response => {
+        result = [0, response.data];
+    }).catch(error => {
+        if(!error.response) {
+            console.log("connection refused to avalanche client");
+            result = [1];
+        } else {
+            console.log(error.response.data);
+            result = [1];
+        }
+    });
 
-    return response.data;
+    return result;
 };
 
 
 //GET address info by hash from C-chain
 exports.getAddressInfoFromCChain = async (cChainAddress) => {
-    const responseForBalance = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+    let balanceResult;
+
+    await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
         id: 1,
         method: 'eth_getBalance',
@@ -76,10 +108,20 @@ exports.getAddressInfoFromCChain = async (cChainAddress) => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
+    }).then(response => {
+        balanceResult = [0, response.data.result];
+    }).catch(error => {
+        if(!error.response) {
+            console.log("connection refused to avalanche client");
+            balanceResult = [1, JSON.parse('{"result":"connection refused to avalanche client"}')];
+        } else {
+            console.log(error.response.data);
+            balanceResult = [1, error.response.data];
+        }
     });
     
-    if (responseForBalance.data.error) {
-        return responseForBalance.data.error.message;
+    if (balanceResult[0] == 1) {
+        return balanceResult;
     }
 
     const responseForTransactionCount = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
@@ -94,7 +136,7 @@ exports.getAddressInfoFromCChain = async (cChainAddress) => {
         },
     });
 
-    return [web3.fromWei(`${responseForBalance.data.result}`, 'ether'), parseInt(responseForTransactionCount.data.result)];
+    return [web3.fromWei(`${balanceResult.data.result}`, 'ether'), parseInt(responseForTransactionCount.data.result)];
 };
 
 
@@ -103,7 +145,9 @@ exports.getAddressInfoFromCChain = async (cChainAddress) => {
 
 //GET X unaccepted transactions after N-th transaction from C-chain
 exports.getXPendingTransactionsAfterNthFromCChain = async (n, x) => {
-    const response = await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+    let result;
+
+    await axios.post(process.env.C_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
         id: 1,
         method: 'eth_getBlockByNumber',
@@ -113,11 +157,17 @@ exports.getXPendingTransactionsAfterNthFromCChain = async (n, x) => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
+    }).then(response => {
+        result = [0, (response.data.result.transactions).slice(n - x, n)];
+    }).catch(error => {
+        if(!error.response) {
+            console.log("connection refused to avalanche client");
+            result = [1, JSON.parse('{"result":"connection refused to avalanche client"}')];
+        } else {
+            console.log("api call rejected or not enough transactions");
+            result = [1, JSON.parse('{"result":"api call rejected or not enough transactions"}')];
+        }
     });
     
-    if ((response.data.result.transactions).slice(n - x, n).length === 0) {
-        return JSON.parse('{"result": "not enough transactions"}')
-    }
-    
-    return (response.data.result.transactions).slice(n - x, n);
+    return result;
 }
