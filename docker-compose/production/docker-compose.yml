@@ -1,0 +1,82 @@
+version: '3.5'
+volumes:
+  avalanche-ipcs:
+services:
+  mysql:
+    image: "mysql:8.0.24"
+    volumes:
+      - /var/lib/ortelius/mysql:/var/lib/mysql
+      - /home/alper/go/ortelius/docker/my.cnf:/etc/mysql/my.cnf
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ortelius
+    restart: on-failure
+  migrate:
+    image: "migrate/migrate:v4.14.1"
+    volumes:
+      - /home/alper/go/ortelius/services/db/migrations:/migrations
+    depends_on:
+      - mysql
+    entrypoint: ["/bin/sh"]
+    command: |
+      -c 'while ! migrate -path=/migrations/ -database "mysql://root:password@tcp(mysql:3306)/ortelius" up; do
+        sleep 1
+      done'
+    restart: on-failure
+  redis:
+    image: "redis:6.2.3-alpine3.13"
+    command: redis-server
+    ports:
+      - "6379:6379"
+    restart: on-failure
+  avalanche:
+    env_file:
+      - production.env
+    image: "avaplatform/avalanchego:v1.5.2"
+    command: /bin/sh -cx "exec /avalanchego/build/avalanchego
+      --config-file=/opt/config.json
+      --network-id=$${NETWORKID}
+      "
+    ports:
+      - "9650:9650"
+    volumes:
+      - /var/lib/ortelius/avalanche:/var/lib/avalanche
+      - /home/alper/go/ortelius/docker/avalanchego_config.json:/opt/config.json
+      - avalanche-ipcs:/tmp
+    depends_on:
+      - indexer
+    restart: always
+  indexer: &ortelius-app
+    image: "avaplatform/ortelius:v1.5.2"
+    command: ["stream", "indexer", "-c", "/opt/config.json"]
+    external_links:
+      - mysql
+      - redis
+    depends_on:
+      - mysql
+      - migrate
+      - redis
+    volumes:
+      - avalanche-ipcs:/tmp
+      - /home/alper/go/ortelius/docker/config.json:/opt/config.json
+    restart: on-failure
+  api:
+    <<: *ortelius-app
+    command: ["api", "-c", "/opt/config.json"]
+    ports:
+      - 8080:8080
+  avalanche-api-server:
+    image: "cr0c0pk1/avalanche-api-server"
+    command: "node server.js"
+    ports:
+      - "4444:4444"
+    depends_on:
+      - mysql
+      - migrate
+      - redis
+      - avalanche
+      - indexer
+      - api
+    restart: on-failure
