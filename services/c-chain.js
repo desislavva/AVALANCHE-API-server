@@ -35,7 +35,13 @@ exports.getBlockByHashFromCChain = async (hash) => {
 
 //GET block info by number from C-chain
 exports.getBlockByNumberFromCChain = async (number) => {
-    const hexNumber = "0x" + parseInt(number).toString(16);
+    let hexNumber;
+    
+    if (number == "latest") {
+        hexNumber = number;
+    } else {
+        hexNumber = "0x" + parseInt(number).toString(16);
+    }
     
     let result;
 
