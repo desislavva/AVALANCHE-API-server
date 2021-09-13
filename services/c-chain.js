@@ -142,7 +142,7 @@ exports.getAddressInfoFromCChain = async (cChainAddress) => {
         },
     });
 
-    return [web3.fromWei(`${balanceResult.data.result}`, 'ether'), parseInt(responseForTransactionCount.data.result)];
+    return [web3.fromWei(`${balanceResult[1]}`, 'ether'), parseInt(responseForTransactionCount.data.result)];
 };
 
 
