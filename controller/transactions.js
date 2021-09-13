@@ -17,9 +17,9 @@ exports.getTransactionByHash = async (req, res, next) => {
 
     xChainTransaction = await xChainMethods.getTransactionByIdFromXChain(req.params.hash);
     cChainTransaction = await cChainMethods.getTransactionByHashFromCChain(req.params.hash);
-    //pChainTransaction = await pChainMethods.getTransactionByIdFromPChain(req.params.hash);
+    pChainTransaction = await pChainMethods.getTransactionByIdFromPChain(req.params.hash);
 
-    if (xChainTransaction == 1 || cChainTransaction[0] == 1 || pChainTransaction == 1) {
+    if (xChainTransaction == 1 && cChainTransaction[0] == 1 && pChainTransaction == 1) {
         res.send(JSON.parse('{"result":"connection refused to avalanche client or api call rejected"}'));
     } else if (xChainTransaction != 1) {
         res.send(xChainTransaction);
