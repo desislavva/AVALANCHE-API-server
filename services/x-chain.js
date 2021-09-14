@@ -20,7 +20,7 @@ exports.getTransactionByIdFromXChain = async (txId) => {
 exports.getAddressInfoByHashFromXChain = async (address) => {
     let balanceResult;
 
-    const responseForBalance = await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+    await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
         id: 1,
         method: 'avm.getAllBalances',
@@ -51,13 +51,13 @@ exports.getAddressInfoByHashFromXChain = async (address) => {
 
     let responseForAssets;
 
-    for(let i = 0; i < responseForBalance.data.result.balances.length; i++) {
+    for(let i = 0; i < balanceResult[1].balances.length; i++) {
         responseForAssets = await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
             jsonrpc: '2.0',
             id: 1,
             method: 'avm.getAssetDescription',
             params: {
-                'assetID' :`${responseForBalance.data.result.balances[i].asset}`
+                'assetID' :`${balanceResult[1].balances[i].asset}`
             }
         }, {
             headers: {
@@ -67,14 +67,14 @@ exports.getAddressInfoByHashFromXChain = async (address) => {
         });
     }
     
-    return [responseForBalance.data.result.balances, responseForAssets.data.result];
+    return [balanceResult[1].balances, responseForAssets.data.result];
 };
 
 //GET X transaction from address after N-th transaction
 exports.getXTransactionsAfterNthFromAddressFromXChain = async (address, n, x) => {
     let transactionsResult;
 
-    const response = await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
+    await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
         jsonrpc: '2.0',
         id: 1,
         method: 'avm.getAddressTxs',
