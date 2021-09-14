@@ -44,7 +44,8 @@ exports.getAddressInfoByHashFromXChain = async (address) => {
         }
     });
 
-    if (balanceResult[0] == 1) {
+    if (balanceResult[0] == 1 || typeof balanceResult[1] == 'undefined') {
+        balanceResult[0] = 1
         return balanceResult;
     }
 
