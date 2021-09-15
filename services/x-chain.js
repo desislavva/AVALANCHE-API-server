@@ -93,7 +93,7 @@ exports.getRecentTransactions = async () => {
     try {
         response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT + `transactions?chainID=2JVSBoinj9C2J33VntvzYtVJNZdN2NKiwwKjcumHUWEb5DbBrm&limit=1&sort=timestamp-desc`}`);
     } catch (error) {
-        return [1, error.response.data];
+        return [1];
     }
     
     return [0, response.data.transactions[0]];
