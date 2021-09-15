@@ -13,4 +13,10 @@ router.get('/:address/:n/:x', TransactionController.getXTransactionsAfterNthFrom
 // GET pending transactions
 router.get('/:n/:x', TransactionController.getXPendingTransactionsAfterNth);
 
+//GET Recent transactions from X-chain
+router.get('/recentxchain', TransactionController.getRecentTransactionsFromXChain);
+
+//GET Recent transactions from P-chain
+router.get('/recentpchain', TransactionController.getRecentTransactionsFromPChain);
+
 module.exports = router;

@@ -51,6 +51,10 @@ exports.getAddressInfoByHashFromXChain = async (address) => {
 
     let responseForAssets;
 
+    if (balanceResult[1].balances.length <= 0) {
+        return [balanceResult[1].balances, 'AVAX'];
+    }
+
     for(let i = 0; i < balanceResult[1].balances.length; i++) {
         responseForAssets = await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
             jsonrpc: '2.0',
@@ -72,32 +76,25 @@ exports.getAddressInfoByHashFromXChain = async (address) => {
 
 //GET X transaction from address after N-th transaction
 exports.getXTransactionsAfterNthFromAddressFromXChain = async (address, n, x) => {
-    let transactionsResult;
+    let response;
 
-    await axios.post(process.env.X_CHAIN_BC_CLIENT_BLOCK_ENDPOINT, {
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'avm.getAddressTxs',
-        params: {
-                address: `${address}`,
-                assetID: 'AVAX'
-        }
-    }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
-    }).then(response => {
-        transactionsResult = [0, (response.data.result.txIDs).slice(n - x, n)];
-    }).catch(error => {
-        if(!error.response) {
-            console.log("connection refused to avalanche client");
-            transactionsResult = [1, JSON.parse('{"result":"connection refused to avalanche client"}')];
-        } else {
-            console.log(error.response.data);
-            transactionsResult = [1, error.response.data];
-        }
-    });
+    try {
+        response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT + `transactions?address=${address}&limit=1&sort=timestamp-desc`}`);
+    } catch (error) {
+        return [1, error.response.data];
+    }
+    
+    return [0, response.data.transactions];
+}
 
-    return transactionsResult;
+exports.getRecentTransactions = async () => {
+    let response;
+
+    try {
+        response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT + `transactions?chainID=2JVSBoinj9C2J33VntvzYtVJNZdN2NKiwwKjcumHUWEb5DbBrm&limit=1&sort=timestamp-desc`}`);
+    } catch (error) {
+        return [1, error.response.data];
+    }
+    
+    return [0, response.data.transactions[0]];
 }

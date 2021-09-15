@@ -3,8 +3,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-
-
 //GET transaction by hash from P-chain - Ortelius API
 exports.getTransactionByIdFromPChain = async (txId) => {
     let response;
@@ -61,3 +59,15 @@ exports.getXTransactionsAfterNthFromAddressFromPChain = async (address, n, x) =>
 
     return (response.data.transactions).slice(n - x, n);
 };
+
+exports.getRecentTransactions = async () => {
+    let response;
+
+    try {
+        response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT + `transactions?chainID=11111111111111111111111111111111LpoYY&limit=1&sort=timestamp-desc`}`);
+    } catch (error) {
+        return [1, error.response.data];
+    }
+    
+    return [0, response.data.transactions[0]];
+}

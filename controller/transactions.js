@@ -75,3 +75,23 @@ exports.getXPendingTransactionsAfterNth = async (req, res, next) => {
     }
 
 };
+
+exports.getRecentTransactionsFromXChain = async (req, res, next) => {
+    xChainTransaction = await xChainMethods.getRecentTransactions();
+
+    if (xChainTransaction[0] == 1) {
+        res.send(xChainTransaction[1]);
+    } else {
+        res.send(xChainTransaction[1])
+    }
+};
+
+exports.getRecentTransactionsFromPChain = async (req, res, next) => {
+    pChainTransaction = await pChainMethods.getRecentTransactions();
+
+    if (pChainTransaction[0] == 1) {
+        res.send(pChainTransaction[1]);
+    } else {
+        res.send(pChainTransaction[1])
+    }
+};
