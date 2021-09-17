@@ -52,3 +52,15 @@ ecce33b30ebf  <your username>/<your-image-name>:latest  npm start  ...   49160->
 ```
 
 ## Method 3 - Docker containers for all needed apps
+
+### Settings for Ortelius API, Ortelius Indexer, MySQL, AvalancheGo, Redis
+[Check official docs](https://github.com/ava-labs/ortelius/tree/master/docs)
+
+### Start docker-compose
+`docker-compose -f docker-compose.yml up -d --remove-orphans`
+
+### Stop docker-compose
+`docker-compose -f docker-compose.yml stop`
+
+### Logs for containers
+`docker-compose -f docker-compose.yml logs -f`
