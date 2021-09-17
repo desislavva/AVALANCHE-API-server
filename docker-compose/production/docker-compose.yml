@@ -6,7 +6,7 @@ services:
     image: "mysql:8.0.24"
     volumes:
       - /var/lib/ortelius/mysql:/var/lib/mysql
-      - /home/alper/go/ortelius/docker/my.cnf:/etc/mysql/my.cnf
+      - ./../my.cnf:/etc/mysql/my.cnf
     ports:
       - "3306:3306"
     environment:
@@ -16,7 +16,7 @@ services:
   migrate:
     image: "migrate/migrate:v4.14.1"
     volumes:
-      - /home/alper/go/ortelius/services/db/migrations:/migrations
+      - ../../services/db/migrations:/migrations
     depends_on:
       - mysql
     entrypoint: ["/bin/sh"]
@@ -43,7 +43,7 @@ services:
       - "9650:9650"
     volumes:
       - /var/lib/ortelius/avalanche:/var/lib/avalanche
-      - /home/alper/go/ortelius/docker/avalanchego_config.json:/opt/config.json
+      - ./../avalanchego_config.json:/opt/config.json
       - avalanche-ipcs:/tmp
     depends_on:
       - indexer
