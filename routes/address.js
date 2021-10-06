@@ -6,6 +6,16 @@ const router = express.Router();
 
 /**
  * @swagger
+ * definitions:
+ *  address: 
+ *   type: array
+ *   description: Balance and transaction count
+ *   example: ["6921799.227440772181847", 720330]
+ *  
+ */
+
+/**
+ * @swagger
  * tags:
  *  - name: Addresses
  *    description: Address details
@@ -36,6 +46,12 @@ const router = express.Router();
  *   responses:
  *    200:
  *     description: Address details 
+ *     responseBody:
+ *      content:
+ *       schema: 
+ *        type: array
+ *        description: Balance and transaction count
+ *        example: ["6921799.227440772181847", 720330]
  *    500:
  *     description: failure fetching address details
  */
