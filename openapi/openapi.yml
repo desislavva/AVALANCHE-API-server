@@ -1,0 +1,111 @@
+openapi: '3.0.0'
+info: {
+ title: 'Avalanche server API',
+ version: '1.0.0',
+ description: 'Avalanche Api for interacting with node'
+}
+
+
+
+
+
+# /blocks/hash/{hash}:
+#  get:
+#   summary: get block by hash
+#   tags:
+#   - Blocks
+#   description: get single block providing hash
+#   parameters:
+#   - in: path
+#     name: hash
+#     schema:
+#       type: string
+#     required: true
+#     description: number of block
+#     example: '0x0bcd0c4e5635f21dd4352aa82692a5e29bcf2c5373da9427e5ab38bd4c7cfd33'
+#   responses:
+#    200:
+#     description: Block details
+#    500:
+#     description: failure fetching the block
+
+
+# /blocks/number/{blocknumber}:
+#  get:
+#   summary: get block by number
+#   tags:
+#   - Blocks
+#   description: get single block providing number
+#   parameters:
+#   - in: path
+#     name: blocknumber
+#     schema:
+#       type: integer
+#     required: true
+#     description: number of block
+#     example: 1940150
+#   responses:
+#    200:
+#     description: Block details
+#    500:
+#     description: failure fetching the block
+
+paths:
+ /address/hash/{hash}:
+  get:
+   summary: get block by number
+   tags:
+   - Addresses
+   description: GET address info by hash
+   parameters:
+   - in: path
+     name: hash
+     schema:
+       type: string
+     required: true
+     description: hash of address
+     example: 'X-avax1l3gec03n5qrp6cwhnt4syx6wnn8pee6r87elu2'
+   responses:
+    200:
+     description: Address details 
+     content:
+      application/josn:
+       schema: 
+        type: array
+    500:
+     description: failure fetching address details
+
+ /network:
+  get:
+   summary: get network info
+   tags:
+   - Network
+   description: Network
+   responses:
+    200:
+     description: Network info
+     content:
+      application/json:
+        schema:
+          type: array
+          required:
+            - stringProperty
+            - integerProperty
+            - integerProperty1
+            - stringProperty1
+          properties:
+            stringProperty:
+              type: string
+            integerProperty:
+              type: integer
+            stringProperty1:
+              type: string
+            integerProperty1:
+              type: integer
+    500:
+     description: failure fetching network
+
+
+
+ 
+
