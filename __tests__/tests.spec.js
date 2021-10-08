@@ -59,6 +59,52 @@ describe('GET /transactions/hash/{hash}', () => {
     });
 });
 
+describe('GET /transactions/{address}/{n}/{x}', () => {
+    it('should satisfy OpenAPI spec', async () => {
+        const address = 'X-fuji1xpmx0ljrpvqexrvrj26fnggvr0ax9wm32gaxmx';
+        const n = 10;
+        const x = 5;
+        const res = await axios.get(`http://localhost:4444/transactions/${address}/${n}/${x}`)
+
+        expect(res.status).toEqual(200);
+        expect(res).toSatisfyApiSpec();
+       
+    });
+});
+
+describe('GET /transactions/{n}/{x}', () => {
+    it('should satisfy OpenAPI spec', async () => {
+        const n = 10;
+        const x = 5;
+        const res = await axios.get(`http://localhost:4444/transactions/${n}/${x}`)
+
+        expect(res.status).toEqual(200);
+        expect(res).toSatisfyApiSpec();
+       
+    });
+});
+
+describe('GET /transactions/recentxchain', () => {
+    it('should satisfy OpenAPI spec', async () => {
+        const res = await axios.get(`http://localhost:4444/transactions/recentxchain`)
+
+        expect(res.status).toEqual(200);
+        expect(res).toSatisfyApiSpec();
+       
+    });
+});
+
+describe('GET /transactions/recentpchain', () => {
+    it('should satisfy OpenAPI spec', async () => {
+        const res = await axios.get(`http://localhost:4444/transactions/recentpchain`)
+
+        expect(res.status).toEqual(200);
+        expect(res).toSatisfyApiSpec();
+       
+    });
+});
+
+
 
 describe('C-chain', () => {
     it('test getblockbyhash without starting client', async () => {

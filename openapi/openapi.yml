@@ -131,7 +131,7 @@ paths:
   get:
    summary: get transaction by hash
    tags:
-   - Transaction
+   - Transactions
    description: get transaction providing hash
    parameters:
    - in: path
@@ -187,12 +187,74 @@ paths:
    responses:
     200:
      description: Transactions of address
-     
+     content:
+      application/json:
+        schema:
+          type: array
     500:
      description: failure fetching transactions
 
+ /transactions/{n}/{x}:
+  get:
+   summary: get x transactions after N-th
+   tags:
+    - Transactions
+   description: get transaction
+   parameters:
+    - in: path
+      name: n
+      schema:
+       type: integer
+      required: true
+      description: transactions 
+      example: 1
+    - in: path
+      name: x
+      schema:
+       type: integer
+      required: true
+      description: X transactions after N-th
+      example: 2
+   responses:
+    200:
+     description: Transaction
+     content:
+      application/json:
+        schema:
+          type: array
+    500:
+     description: failure fetching transactions
 
+ /transactions/recentxchain:
+  get:
+   summary: get recent transactions from X-chain
+   tags:
+    - Transactions
+   description: recent transactions from X-chain
+   responses:
+    200:
+     description: Recent transactions
+     content:
+      application/json:
+        schema:
+          type: array
+    500:
+     description: failure fetching transactions
 
-
+ /transactions/recentpchain:
+  get:
+   summary: get recent transactions from P-chain
+   tags:
+    - Transactions
+   description: recent transactions from P-chain
+   responses:
+    200:
+     description: Recent transactions
+     content:
+      application/json:
+        schema:
+          type: array
+    500:
+     description: failure fetching transactions
  
-
+     
