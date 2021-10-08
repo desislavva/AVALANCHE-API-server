@@ -31,7 +31,7 @@ const router = express.Router();
  * @swagger
  * /address/hash/{hash}:
  *  get:
- *   summary: get block by number
+ *   summary: get address by hash
  *   tags:
  *    - Addresses
  *   description: GET address info by hash

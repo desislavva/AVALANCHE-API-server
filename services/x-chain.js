@@ -81,7 +81,8 @@ exports.getXTransactionsAfterNthFromAddressFromXChain = async (address, n, x) =>
     try {
         response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT + `transactions?address=${address}&limit=1&sort=timestamp-desc`}`);
     } catch (error) {
-        return [1, error.response.data];
+        
+        return [1, error];
     }
     
     return [0, response.data.transactions];

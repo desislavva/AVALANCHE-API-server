@@ -6,14 +6,6 @@ info: {
 }
 
 
-
-
-
-
-
-
-
-
 paths:
  /address/hash/{hash}:
   get:
@@ -127,6 +119,37 @@ paths:
     500:
      description: failure fetching network
 
+ /transactions/{n}/{x}:
+  get:
+   summary: get x transactions after N-th
+   tags:
+    - Transactions
+   description: get transaction
+   parameters:
+    - in: path
+      name: n
+      schema:
+       type: integer
+      required: true
+      description: transactions 
+      example: 1
+    - in: path
+      name: x
+      schema:
+       type: integer
+      required: true
+      description: X transactions after N-th
+      example: 2
+   responses:
+    200:
+     description: Transaction
+     content:
+      application/json:
+        schema:
+          type: array
+    500:
+     description: failure fetching transactions
+
  /transactions/hash/{hash}:
   get:
    summary: get transaction by hash
@@ -194,36 +217,7 @@ paths:
     500:
      description: failure fetching transactions
 
- /transactions/{n}/{x}:
-  get:
-   summary: get x transactions after N-th
-   tags:
-    - Transactions
-   description: get transaction
-   parameters:
-    - in: path
-      name: n
-      schema:
-       type: integer
-      required: true
-      description: transactions 
-      example: 1
-    - in: path
-      name: x
-      schema:
-       type: integer
-      required: true
-      description: X transactions after N-th
-      example: 2
-   responses:
-    200:
-     description: Transaction
-     content:
-      application/json:
-        schema:
-          type: array
-    500:
-     description: failure fetching transactions
+
 
  /transactions/recentxchain:
   get:
@@ -237,7 +231,7 @@ paths:
      content:
       application/json:
         schema:
-          type: array
+          type: object
     500:
      description: failure fetching transactions
 
@@ -253,7 +247,7 @@ paths:
      content:
       application/json:
         schema:
-          type: array
+          type: object
     500:
      description: failure fetching transactions
  

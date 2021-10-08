@@ -34,7 +34,7 @@ router.get('/hash/:hash', TransactionController.getTransactionByHash);
  * @swagger
  * /transactions/{address}/{n}/{x}:
  *  get:
- *   summary: get transaction by hash
+ *   summary: get x transactions of address after N-th
  *   tags:
  *    - Transactions
  *   description: get transactions of address
@@ -44,7 +44,7 @@ router.get('/hash/:hash', TransactionController.getTransactionByHash);
  *      schema:
  *       type: string
  *      required: true
- *      description: hash of transaction
+ *      description: hash of address
  *      example: 'X-avax1l3gec03n5qrp6cwhnt4syx6wnn8pee6r87elu2'
  *    - in: path
  *      name: n
@@ -74,28 +74,28 @@ router.get('/:address/:n/:x', TransactionController.getXTransactionsAfterNthFrom
  * @swagger
  * /transactions/{n}/{x}:
  *  get:
- *   summary: get block by number
+ *   summary: get x transactions after n
  *   tags:
  *    - Transactions
- *   description: get single block providing number
+ *   description: get x transactions after n
  *   parameters:
  *    - in: path
  *      name: n
  *      schema:
  *       type: integer
  *      required: true
- *      description: number of pending transactions
+ *      description: Number of transaction
  *      example: 1
  *    - in: path
  *      name: x
  *      schema:
  *       type: integer
  *      required: true
- *      description: X pending transactions after N-th
+ *      description: Transactions count you want after N
  *      example: 2
  *   responses:
  *    200:
- *     description: Pending transactions
+ *     description: Transactions
  *    500:
  *     description: failure fetching transactions
  */
