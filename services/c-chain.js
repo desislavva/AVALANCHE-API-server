@@ -59,7 +59,6 @@ exports.getBlockByNumberFromCChain = async (number) => {
         result = [response.data, response.data.result.hash];
     }).catch(error => {
         if(!error.response) {
-            console.log("connection refused to avalanche client");
             result = [1, JSON.parse('{"result":"connection refused to avalanche client"}')];
         } else {
             console.log(error.response.data);
