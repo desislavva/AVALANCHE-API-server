@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
+const websocketServer = require('./websocket/websocket-server');
+
 const blockRoutes = require('./routes/blocks');
 const transactionRoutes = require('./routes/transactions');
 const addressRoutes = require('./routes/address');
