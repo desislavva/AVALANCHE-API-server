@@ -6,29 +6,31 @@ const cChainMethods = require('../services/c-chain');
 const xChainMethods = require('../services/x-chain');
 const pChainMethods = require('../services/p-chain');
 
+const transactionByHashMock = require('../mocks/transaction-by-hash-http.json');
+
 const X_CHAIN = 'X';
 const P_CHAIN = 'P';
 const C_CHAIN = '0x';
 
 exports.getTransactionByHash = async (clientWs, hash) => {
-    let xChainTransaction;
-    let cChainTransaction;
-    let pChainTransaction;
+    // let xChainTransaction;
+    // let cChainTransaction;
+    // let pChainTransaction;
 
-    xChainTransaction = await xChainMethods.getTransactionByIdFromXChain(hash);
-    cChainTransaction = await cChainMethods.getTransactionByHashFromCChain(hash);
-    pChainTransaction = await pChainMethods.getTransactionByIdFromPChain(hash);
+    // xChainTransaction = await xChainMethods.getTransactionByIdFromXChain(hash);
+    // cChainTransaction = await cChainMethods.getTransactionByHashFromCChain(hash);
+    // pChainTransaction = await pChainMethods.getTransactionByIdFromPChain(hash);
 
-    if (xChainTransaction == 1 && cChainTransaction[0] == 1 && pChainTransaction == 1) {
-        clientWs.send(JSON.stringify('{"result":"connection refused to avalanche client or api call rejected"}'));
-    } else if (xChainTransaction != 1) {
-        clientWs.send(JSON.stringify(xChainTransaction));
-    } else if (cChainTransaction[0] != 1) {
-        clientWs.send(JSON.stringify(cChainTransaction[1]));
-    } else if (pChainTransaction != 1) {
-        clientWs.send(JSON.stringify(pChainTransaction));
-    }
-
+    // if (xChainTransaction == 1 && cChainTransaction[0] == 1 && pChainTransaction == 1) {
+    //     clientWs.send(JSON.stringify('{"result":"connection refused to avalanche client or api call rejected"}'));
+    // } else if (xChainTransaction != 1) {
+    //     clientWs.send(JSON.stringify(xChainTransaction));
+    // } else if (cChainTransaction[0] != 1) {
+    //     clientWs.send(JSON.stringify(cChainTransaction[1]));
+    // } else if (pChainTransaction != 1) {
+    //     clientWs.send(JSON.stringify(pChainTransaction));
+    // }
+    clientWs.send(JSON.stringify(transactionByHashMock.result));
 };
 
 exports.getXTransactionsAfterNthFromAddress = async (clientWs, address, n, x) => {

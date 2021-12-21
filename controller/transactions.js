@@ -6,28 +6,31 @@ const cChainMethods = require('../services/c-chain');
 const xChainMethods = require('../services/x-chain');
 const pChainMethods = require('../services/p-chain');
 
+const transactionByHashMock = require('../mocks/transaction-by-hash-http.json');
+
 const X_CHAIN = 'X';
 const P_CHAIN = 'P';
 const C_CHAIN = '0x';
 
 exports.getTransactionByHash = async (req, res, next) => {
-    let xChainTransaction;
-    let cChainTransaction;
-    let pChainTransaction;
+    // let xChainTransaction;
+    // let cChainTransaction;
+    // let pChainTransaction;
 
-    xChainTransaction = await xChainMethods.getTransactionByIdFromXChain(req.params.hash);
-    cChainTransaction = await cChainMethods.getTransactionByHashFromCChain(req.params.hash);
-    pChainTransaction = await pChainMethods.getTransactionByIdFromPChain(req.params.hash);
+    // xChainTransaction = await xChainMethods.getTransactionByIdFromXChain(req.params.hash);
+    // cChainTransaction = await cChainMethods.getTransactionByHashFromCChain(req.params.hash);
+    // pChainTransaction = await pChainMethods.getTransactionByIdFromPChain(req.params.hash);
 
-    if (xChainTransaction == 1 && cChainTransaction[0] == 1 && pChainTransaction == 1) {
-        res.send(JSON.parse('{"result":"connection refused to avalanche client or api call rejected"}'));
-    } else if (xChainTransaction != 1) {
-        res.send(xChainTransaction);
-    } else if (cChainTransaction[0] != 1) {
-        res.send(cChainTransaction[1]);
-    } else if (pChainTransaction != 1) {
-        res.send(pChainTransaction);
-    }
+    // if (xChainTransaction == 1 && cChainTransaction[0] == 1 && pChainTransaction == 1) {
+    //     res.send(JSON.parse('{"result":"connection refused to avalanche client or api call rejected"}'));
+    // } else if (xChainTransaction != 1) {
+    //     res.send(xChainTransaction);
+    // } else if (cChainTransaction[0] != 1) {
+    //     res.send(cChainTransaction[1]);
+    // } else if (pChainTransaction != 1) {
+    //     res.send(pChainTransaction);
+    // }
+    res.send(transactionByHashMock.result);
 
 };
 
