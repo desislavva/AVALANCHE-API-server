@@ -146,7 +146,17 @@ exports.getAddressInfoFromCChain = async (cChainAddress) => {
 
 
 //GET X transactions from address after N-th transaction from C-chain - Ortelius API
+exports.getXTransactionsAfterNthFromAddressFromCChain = async (address, n, x) => {
+    let response;
 
+    try {
+        response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT}` + `ctransactions?address=${address}`);
+    } catch (error) {
+        return 1;
+    }
+
+    return (response.data.transactions).slice(n - x, n);
+};
 
 //GET X unaccepted transactions after N-th transaction from C-chain
 exports.getXPendingTransactionsAfterNthFromCChain = async (n, x) => {

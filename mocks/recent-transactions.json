@@ -1,0 +1,33 @@
+{
+    "data": [{
+        "id": "1",
+        "inputs": [{
+            "output": {
+                "addresses": [
+                    "fromAddressHashPChain"
+                ]
+            }
+        }],
+        "outputs": [{
+            "addresses": [
+                "toAddressHashPChain"
+            ]
+        }],
+        "chainID": "11111111111111111111111111111111LpoYY"
+    },{
+        "id": "2",
+        "inputs": [{
+            "output": {
+                "addresses": [
+                    "fromAddressHashXChain"
+                ]
+            }
+        }],
+        "outputs": [{
+            "addresses": [
+                "toAddressHashXChain"
+            ]
+        }],
+        "chainID": "test"
+    }]
+}

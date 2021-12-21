@@ -73,7 +73,6 @@ exports.getXPendingTransactionsAfterNth = async (req, res, next) => {
     } else {
         res.send(JSON.parse('{"result":"n and x < 0"}'));
     }
-
 };
 
 exports.getRecentTransactionsFromXChain = async (req, res, next) => {
