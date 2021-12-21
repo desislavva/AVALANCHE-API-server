@@ -1,6 +1,6 @@
 {
     "data": [{
-        "id": "1",
+        "id": "http1",
         "inputs": [{
             "output": {
                 "addresses": [
@@ -15,7 +15,7 @@
         }],
         "chainID": "11111111111111111111111111111111LpoYY"
     },{
-        "id": "2",
+        "id": "http2",
         "inputs": [{
             "output": {
                 "addresses": [

@@ -1,6 +1,8 @@
 const axios = require("axios");
 const dotenv = require('dotenv');
 
+const mockTransactions = require('../mocks/recent-transactions-http.json');
+
 dotenv.config();
 
 //GET transaction info by hash/id - Ortelius API
@@ -89,13 +91,11 @@ exports.getXTransactionsAfterNthFromAddressFromXChain = async (address, n, x) =>
 }
 
 exports.getRecentTransactions = async () => {
-    let response;
-
-    try {
-        response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT + `transactions?chainID=2JVSBoinj9C2J33VntvzYtVJNZdN2NKiwwKjcumHUWEb5DbBrm&limit=1&sort=timestamp-desc`}`);
-    } catch (error) {
-        return [1];
-    }
+    // try {
+    //     // response = await axios.get(`${process.env.ORTELIUS_API_ENDPOINT + `transactions?chainID=2JVSBoinj9C2J33VntvzYtVJNZdN2NKiwwKjcumHUWEb5DbBrm&limit=1&sort=timestamp-desc`}`);
+    // } catch (error) {
+    //     return [1];
+    // }
     
-    return [0, response.data.transactions[0]];
+    return [0, mockTransactions.data[1]];
 }
